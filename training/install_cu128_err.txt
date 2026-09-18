@@ -1,0 +1,6 @@
+  WARNING: The script isympy.exe is installed in 'D:\Anaconda\envs\pytorch\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts torchfrtrace.exe and torchrun.exe are installed in 'D:\Anaconda\envs\pytorch\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+torchaudio 2.5.1 requires torch==2.5.1, but you have torch 2.11.0+cu128 which is incompatible.

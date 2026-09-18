@@ -1,0 +1,38 @@
+# ===== 数据集 =====
+data/
+*.zip
+
+# ===== Python =====
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.whl
+
+# ===== .NET 编译输出 =====
+bin/
+obj/
+*.user
+*.suo
+*.cache
+
+# ===== 训练产物 =====
+runs/
+*.pt
+!models/*.pt
+
+# ===== 备份/临时 =====
+Backup/
+*.bak
+*.tmp
+*.log
+
+# ===== IDE =====
+.vs/
+.vscode/
+*.sln.DotSettings.user
+
+# ===== 系统文件 =====
+Thumbs.db
+Desktop.ini
+.DS_Store
