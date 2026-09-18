@@ -21,6 +21,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         EnumerateCameras();
         EnumerateDevices();
+        EnumerateModes();
 
         _pipeline.PreviewCleared += OnPreviewCleared;
         _pipeline.FrameReady += OnFrameReady;
@@ -55,8 +56,8 @@ public partial class MainWindow : Window
             ResultList.Items.Clear();
             PlaceholderText.Visibility = Visibility.Visible;
             PlaceholderText.Text = _modelLoaded
-                ? "已停止\n\n预览已清空，点击「启动」重新检测"
-                : "摄像头已停止\n\n请加载模型后启动";
+                ? "点击「启动」开始检测"
+                : "请先加载模型";
             FpsText.Text = "未启动";
         }, DispatcherPriority.Normal);
 
@@ -145,6 +146,38 @@ public partial class MainWindow : Window
         DeviceCombo.Items.Add(new ComboBoxItem { Content = "NVIDIA GPU (CUDA)", Tag = "cuda" });
         DeviceCombo.Items.Add(new ComboBoxItem { Content = "GPU (OpenCL)", Tag = "opencl" });
         DeviceCombo.SelectedIndex = 0;
+    }
+
+    private void EnumerateModes()
+    {
+        ModeCombo.Items.Clear();
+        ModeCombo.Items.Add(new ComboBoxItem { Content = "人体识别", Tag = "person" });
+        ModeCombo.Items.Add(new ComboBoxItem { Content = "人脸识别", Tag = "face" });
+        ModeCombo.SelectedIndex = 0;
+    }
+
+    private void ModeCombo_Changed(object sender, SelectionChangedEventArgs e)
+    {
+        if (!IsLoaded || ModeCombo.SelectedItem is not ComboBoxItem item)
+            return;
+
+        bool isFaceMode = (item.Tag as string) == "face";
+        EmotionCheck.Visibility = isFaceMode ? Visibility.Visible : Visibility.Collapsed;
+
+        if (!isFaceMode)
+            EmotionCheck.IsChecked = false;
+
+        StatusText.Text = isFaceMode
+            ? "已切换到人脸识别模式，请加载人脸检测模型"
+            : "已切换到人体识别模式";
+    }
+
+    private void EmotionCheck_Changed(object sender, RoutedEventArgs e)
+    {
+        bool enabled = EmotionCheck.IsChecked == true;
+        StatusText.Text = enabled
+            ? "表情识别已开启（需要同时加载表情分类模型）"
+            : "表情识别已关闭";
     }
 
     private void DeviceCombo_Changed(object sender, SelectionChangedEventArgs e)
@@ -279,8 +312,8 @@ public partial class MainWindow : Window
         ResultList.Items.Clear();
         PlaceholderText.Visibility = Visibility.Visible;
         PlaceholderText.Text = _modelLoaded
-            ? "已停止\n\n预览已清空，点击「启动」重新检测"
-            : "摄像头已停止\n\n请加载模型后启动";
+            ? "点击「启动」开始检测"
+            : "请先加载模型";
         StartBtn.IsEnabled = true;
         StopBtn.IsEnabled = false;
         StatusText.Text = "已停止，预览已清空";
